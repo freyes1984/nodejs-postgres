@@ -1,18 +1,19 @@
-const { request } = require('express')
+const { request, response } = require('express')
+const config = require('./config')
 
 const Pool = require('pg').Pool
 const pool = new Pool({
-    user: 'felipereyes',
-    host: 'localhost',
-    database: 'PEDIDOS',
-    password: 'afroman1984',
-    port: 5432,
+    user: config.DB_USER,
+    host: config.DB_HOST,
+    database: config.DB_NAME,
+    password: config.DB_PASSWORD,
+    port: config.DB_PORT
 })
 
 const getCustomersAsync = async (request, response) => {
     const data = await pool.query('SELECT * FROM public.clientes ORDER BY clienteid ASC')
     console.log('Data:', data.rows)
-    response.status(200).json({info: 'Consultando Clientes', datos: data.rows})
+    response.status(200).json({info: 'Consultar Clientes', datos: data.rows})
 }
 
 const getCategories = (request, response) => {
@@ -20,7 +21,7 @@ const getCategories = (request, response) => {
         if (error) {
             throw error
         }
-        response.status(200).json(result.rows)
+        response.status(200).json({info: 'Consultar Categorias', datos: result.rows})
     })
 }
 
@@ -38,7 +39,7 @@ const getProducts = (request, response) => {
         if(error){
             throw error
         }
-        response.status(200).json(result.rows)
+        response.status(200).json({info: 'Consultar Productos', datos: result.rows})
     })
 }
 
@@ -47,7 +48,7 @@ const getCustomers = (request, response) => {
         if (error) {
             throw error
         }
-        response.status(200).json(result.rows)
+        response.status(200).json({info: 'Consultar Clientes', datos: result.rows})
     })
 }
 
@@ -58,7 +59,7 @@ const getCustomersById = (request, response) => {
         if(error){
             throw error
         }
-        response.status(200).json(result.rows)
+        response.status(200).json({info: 'Consultar Clientes por Id', datos: result.rows})
     })
 }
 
@@ -108,8 +109,31 @@ const getTotalOrders = (request, response) => {
         if(error){
             throw error
         }
-        response.status(200).json(result.rows)
+        response.status(200).json({info: 'Consultar Ordenes Totales', datos: result.rows})
     })
+}
+
+const getProductsCategoriesProviders = (request, response) => {
+    const query = `SELECT
+                            a.productoid,
+                            RTRIM(a.descripcion) AS descripcion_producto,
+                            RTRIM(b.nombrecat) AS categoria_producto,
+                            RTRIM(c.nombreprov) AS proveedor,
+                            RTRIM(c.contacto) AS proveedor_contacto,
+                            RTRIM(c.celuprov) AS proveedor_celular,
+                            RTRIM(c.fijoprov) AS proveedor_fijo
+                    FROM public.productos a
+                    INNER JOIN public.categorias b ON (a.categoriaid = b.categoriaid)
+                    INNER JOIN public.proveedores c ON (a.proveedorid = c.proveedorid)
+                    ORDER BY a.productoid ASC`
+    
+    pool.query(query, (error, result) => {
+        if(error){
+            throw error
+        }
+        response.status(200).json({info: 'Consultar productos, categorias y proveedores', datos: result.rows})
+    })
+    
 }
 
 module.exports = {
@@ -118,5 +142,6 @@ module.exports = {
     getProducts,
     getCustomers,
     getCustomersById,
-    getTotalOrders
+    getTotalOrders,
+    getProductsCategoriesProviders
 }

@@ -4,7 +4,6 @@ const app = express()
 const db = require('./queries')
 const config = require('./config')
 
-
 app.use(bodyParser.json())
 app.use(
   bodyParser.urlencoded({
@@ -22,6 +21,7 @@ app.get('/products', db.getProducts)
 app.get('/customers', db.getCustomers)
 app.get('/customers/:id', db.getCustomersById)
 app.get('/totalorders', db.getTotalOrders)
+app.get('/getallproducts', db.getProductsCategoriesProviders)
 
 app.listen(config.PORT, () => {
     console.log(`App running on port ${config.PORT}.`)
