@@ -1,3 +1,4 @@
+//configuracion de variables constantes
 module.exports = {
     PORT: process.env.PORT || 3000,
     DB_USER: process.env.DB_USER || 'felipereyes',
