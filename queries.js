@@ -29,7 +29,7 @@ const getCategories = (request, response) => {
 const getProducts = (request, response) => {
     const query =  `SELECT
                             productoid,
-                            RTRIM(descripcion) AS descripcion,
+                            descripcion AS descripcion,
                             preciounit,
                             existencia
                     FROM    public.productos
@@ -75,7 +75,7 @@ const getTotalOrders = (request, response) => {
         all_clientes AS (
         SELECT
                 clienteid
-                ,RTRIM(nombrecontacto) as nombrecontacto
+                ,nombrecontacto as nombrecontacto
         FROM 	clientes
         )
         SELECT 
@@ -117,12 +117,12 @@ const getTotalOrders = (request, response) => {
 const getProductsCategoriesProviders = (request, response) => {
     const query = `SELECT
                             a.productoid,
-                            RTRIM(a.descripcion) AS descripcion_producto,
-                            RTRIM(b.nombrecat) AS categoria_producto,
-                            RTRIM(c.nombreprov) AS proveedor,
-                            RTRIM(c.contacto) AS proveedor_contacto,
-                            RTRIM(c.celuprov) AS proveedor_celular,
-                            RTRIM(c.fijoprov) AS proveedor_fijo
+                            a.descripcion AS descripcion_producto,
+                            b.nombrecat AS categoria_producto,
+                            c.nombreprov AS proveedor,
+                            c.contacto AS proveedor_contacto,
+                            c.celuprov AS proveedor_celular,
+                            c.fijoprov AS proveedor_fijo
                     FROM public.productos a
                     INNER JOIN public.categorias b ON (a.categoriaid = b.categoriaid)
                     INNER JOIN public.proveedores c ON (a.proveedorid = c.proveedorid)
