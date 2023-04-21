@@ -15,13 +15,14 @@ app.get('/', (request, response) => {
     response.json({info: 'Node.js, Express, and Postgres API'})
 })
 
-app.get('/customersasync', db.getCustomersAsync)
-app.get('/categories', db.getCategories)
-app.get('/products', db.getProducts)
-app.get('/customers', db.getCustomers)
+app.get('/allcustomersasync', db.getAllCustomersAsync)
+app.get('/allcategories', db.getAllCategories)
+app.get('/allproducts', db.getProducts)
+app.get('/allcustomers', db.getCustomers)
 app.get('/customers/:id', db.getCustomersById)
 app.get('/totalorders', db.getTotalOrders)
 app.get('/getallproducts', db.getProductsCategoriesProviders)
+app.post('/newcategory', db.createNewCategory)
 
 app.listen(config.PORT, () => {
     console.log(`App running on port ${config.PORT}.`)
