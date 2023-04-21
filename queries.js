@@ -146,7 +146,7 @@ const createNewCategory = async (request, response) => {
             if(error){
                 throw error
             }
-            response.status(200).json({menssage: 'Nueva Categoria Creada', datos: result.rows})
+            response.status(200).json({menssage: 'Se creo nueva categoria', datos: result.rows})
         })
     }
 }
