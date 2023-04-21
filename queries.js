@@ -11,13 +11,13 @@ const pool = new Pool({
     port: config.DB_PORT
 })
 
-const getCustomersAsync = async (request, response) => {
+const getAllCustomersAsync = async (request, response) => {
     const data = await pool.query('SELECT * FROM public.clientes ORDER BY clienteid ASC')
     console.log('Data:', data.rows)
     response.status(200).json({info: 'Consultar Clientes', datos: data.rows})
 }
 
-const getCategories = (request, response) => {
+const getAllCategories = (request, response) => {
     pool.query('SELECT * FROM public.categorias ORDER BY categoriaid ASC', (error, result) => {
         if (error) {
             throw error
@@ -127,22 +127,37 @@ const getProductsCategoriesProviders = (request, response) => {
                     INNER JOIN public.categorias b ON (a.categoriaid = b.categoriaid)
                     INNER JOIN public.proveedores c ON (a.proveedorid = c.proveedorid)
                     ORDER BY a.productoid ASC`
-    
+     
     pool.query(query, (error, result) => {
         if(error){
             throw error
         }
         response.status(200).json({info: 'Consultar productos, categorias y proveedores', datos: result.rows})
-    })
-    
+    })   
+}
+
+const createNewCategory = async (request, response) => {
+    const category = request.body.category
+    const data = await pool.query('SELECT * FROM public.categorias WHERE nombrecat ILIKE $1', [`%${category}%`])
+    if(data.rows.length > 0){
+        response.status(200).json({message: 'La categoria ya existe', datos: data.rows})
+    }else{
+        pool.query('INSERT INTO categorias (nombrecat) VALUES ($1) RETURNING *', [category], (error, result) => {
+            if(error){
+                throw error
+            }
+            response.status(200).json({menssage: 'Nueva Categoria Creada', datos: result.rows})
+        })
+    }
 }
 
 module.exports = {
-    getCustomersAsync,
-    getCategories,
+    getAllCustomersAsync,
+    getAllCategories,
     getProducts,
     getCustomers,
     getCustomersById,
     getTotalOrders,
-    getProductsCategoriesProviders
+    getProductsCategoriesProviders,
+    createNewCategory
 }
