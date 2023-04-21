@@ -1,5 +1,5 @@
 //Freyes 2023-04-21
-//archivo de configuracion de consultas en la bd
+//archivo de configuracion de consultas en la bd y funciones
 const { request, response } = require('express')
 const config = require('./config')
 

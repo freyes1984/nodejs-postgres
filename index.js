@@ -1,5 +1,5 @@
 //Freyes 2023-04-21 
-//Routes
+//Routes and config
 const express = require('express')
 const bodyParser = require('body-parser')
 const app = express()
