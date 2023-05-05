@@ -147,15 +147,15 @@ const createNewCategory = async (request, response) => {
     const data = await pool.query('SELECT * FROM public.categorias WHERE nombrecat ILIKE $1', [`%${body.category}%`])
     
     if(data.rows.length > 0){
-        response.status(400).json({message: 'La categoria ya existe', datos: data.rows})
-    }else{
-        pool.query('INSERT INTO categorias (nombrecat) VALUES ($1) RETURNING *', [category], (error, result) => {
-            if(error){
-                throw error
-            }
-            response.status(200).json({menssage: 'Se creo nueva categoria', datos: result.rows})
-        })
+        return response.status(400).json({message: 'La categoria ya existe', datos: data.rows})
     }
+
+    pool.query('INSERT INTO categorias (nombrecat) VALUES ($1) RETURNING *', [body.category], (error, result) => {
+        if(error){
+            throw error
+        }
+        response.status(200).json({menssage: 'Se creo nueva categoria', datos: result.rows})
+    })
 }
 
 module.exports = {
