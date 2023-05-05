@@ -139,8 +139,9 @@ const getProductsCategoriesProviders = (request, response) => {
 
 const createNewCategory = async (request, response) => {
     const body = request.body
-    if(body.category === undefined){
-        return response.status(400).json({error: 'Defina la categoria'})
+
+    if(body.category === undefined || body.category.trim() === ""){
+        return response.status(400).json({error: 'La categoria esta vacia'})
     }
 
     const data = await pool.query('SELECT * FROM public.categorias WHERE nombrecat ILIKE $1', [`%${body.category}%`])
