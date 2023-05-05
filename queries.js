@@ -138,10 +138,15 @@ const getProductsCategoriesProviders = (request, response) => {
 }
 
 const createNewCategory = async (request, response) => {
-    const category = request.body.category
-    const data = await pool.query('SELECT * FROM public.categorias WHERE nombrecat ILIKE $1', [`%${category}%`])
+    const body = request.body
+    if(body.category === undefined){
+        return response.status(400).json({error: 'Defina la categoria'})
+    }
+
+    const data = await pool.query('SELECT * FROM public.categorias WHERE nombrecat ILIKE $1', [`%${body.category}%`])
+    
     if(data.rows.length > 0){
-        response.status(200).json({message: 'La categoria ya existe', datos: data.rows})
+        response.status(400).json({message: 'La categoria ya existe', datos: data.rows})
     }else{
         pool.query('INSERT INTO categorias (nombrecat) VALUES ($1) RETURNING *', [category], (error, result) => {
             if(error){
