@@ -1,6 +1,6 @@
 //configuracion de variables constantes
 module.exports = {
-    PORT: process.env.PORT || 3000,
+    PORT: process.env.PORT || 8081,
     DB_USER: process.env.DB_USER || 'postgres',
     DB_HOST: process.env.DB_HOST || 'localhost',
     DB_NAME: process.env.DB_NAME || 'PEDIDOS',
